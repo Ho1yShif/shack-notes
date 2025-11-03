@@ -2,8 +2,11 @@
   "name": "shack-notes",
   "version": "1.0.0",
   "description": "Shack notes app built with Electron and React",
-  "main": "index.js",
+  "main": "dist/main/main.js",
   "scripts": {
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
