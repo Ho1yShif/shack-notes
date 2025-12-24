@@ -30,5 +30,10 @@
     "electron-vite": "^4.0.1",
     "typescript": "^5.9.3",
     "vite": "^7.1.12"
+  },
+  "dependencies": {
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "web-vitals": "^5.1.0"
   }
 }

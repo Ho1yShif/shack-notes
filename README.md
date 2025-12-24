@@ -22,6 +22,13 @@ cd shack-notes
 npm install
 ```
 
+3. Install React dependencies (if not already installed):
+```bash
+npm install react react-dom web-vitals
+```
+
+> **Note:** React and React-DOM are required for the app to function. If you encounter a blank screen when running the app, make sure these dependencies are installed.
+
 ## Run the Application
 
 ### Development Mode
