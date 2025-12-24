@@ -1,9 +1,15 @@
 import { defineConfig } from "electron-vite";
 import react from "@vitejs/plugin-react";
+import path from "path";
 
 export default defineConfig({
   // Configuration for Main Process
   main: {
+    resolve: {
+      alias: {
+        "@main": path.resolve(__dirname, "src/main"),
+      },
+    },
     build: {
       outDir: "dist/main",
       rollupOptions: {
@@ -14,6 +20,11 @@ export default defineConfig({
 
   // Configuration for Preload Script
   preload: {
+    resolve: {
+      alias: {
+        "@main": path.resolve(__dirname, "src/main"),
+      },
+    },
     build: {
       outDir: "dist/preload",
       rollupOptions: {
@@ -25,6 +36,11 @@ export default defineConfig({
   // Configuration for Renderer Process (React app)
   renderer: {
     plugins: [react()],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "src/renderer"),
+      },
+    },
     build: {
       outDir: "dist/renderer",
       rollupOptions: {
