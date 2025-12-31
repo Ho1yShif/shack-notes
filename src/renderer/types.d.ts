@@ -42,10 +42,19 @@ export interface DeleteNoteResult {
   error?: string;
 }
 
+export interface GetNotesWithPaginationResult {
+  success: boolean;
+  notes?: Note[];
+  total?: number;
+  hasMore?: boolean;
+  error?: string;
+}
+
 declare global {
   interface Window {
     notesAPI: {
       getAllNotes: () => Promise<GetAllNotesResult>;
+      getNotesPaginated: (limit: number, offset: number) => Promise<GetNotesWithPaginationResult>;
       getNote: (id: number) => Promise<GetNoteResult>;
       createNote: (note: CreateNoteInput) => Promise<CreateNoteResult>;
       updateNote: (note: Note) => Promise<GetNoteResult>;

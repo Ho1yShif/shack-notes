@@ -46,6 +46,14 @@ export interface DeleteNoteResult {
     error?: string;
 }
 
+export interface GetNotesWithPaginationResult {
+    success: boolean;
+    notes?: Note[];
+    total?: number;
+    hasMore?: boolean;
+    error?: string;
+}
+
 class DatabaseService {
 
     private db: Database.Database;
@@ -55,6 +63,8 @@ class DatabaseService {
         createNote: null as any,
         getNote: null as any,
         getAllNotes: null as any,
+        getNotesPaginated: null as any,
+        getNotesCount: null as any,
         updateNote: null as any,
         deleteNote: null as any,
     };
@@ -81,7 +91,7 @@ class DatabaseService {
     private prepareStatements() {
         this.statements.createNote = this.db.prepare(`
             INSERT INTO notes (title, content, createdAt, updatedAt)
-            VALUES (?, ?, datetime('now'), datetime('now'))
+            VALUES (?, ?, datetime('now', 'localtime'), datetime('now', 'localtime'))
         `);
         this.statements.getNote = this.db.prepare(`
             SELECT * FROM notes WHERE id = ?
@@ -89,8 +99,14 @@ class DatabaseService {
         this.statements.getAllNotes = this.db.prepare(`
             SELECT * FROM notes ORDER BY updatedAt DESC
         `);
+        this.statements.getNotesPaginated = this.db.prepare(`
+            SELECT * FROM notes ORDER BY updatedAt DESC LIMIT ? OFFSET ?
+        `);
+        this.statements.getNotesCount = this.db.prepare(`
+            SELECT COUNT(*) as total FROM notes
+        `);
         this.statements.updateNote = this.db.prepare(`
-            UPDATE notes SET title = ?, content = ?, updatedAt = datetime('now') WHERE id = ?
+            UPDATE notes SET title = ?, content = ?, updatedAt = datetime('now', 'localtime') WHERE id = ?
         `);
         this.statements.deleteNote = this.db.prepare(`
             DELETE FROM notes WHERE id = ?
@@ -167,6 +183,35 @@ class DatabaseService {
             };
         }
     }
+
+    getNotesPaginated(limit: number, offset: number): GetNotesWithPaginationResult {
+        try {
+            console.log('[DatabaseService] Getting paginated notes:', { limit, offset });
+            const notes = this.statements.getNotesPaginated.all(limit, offset);
+            const countResult = this.statements.getNotesCount.get() as { total: number };
+            const total = countResult.total;
+            const hasMore = offset + notes.length < total;
+            
+            console.log('[DatabaseService] Retrieved', notes.length, 'notes out of', total, 'total. HasMore:', hasMore);
+            return {
+                success: true,
+                notes,
+                total,
+                hasMore
+            };
+        } catch (error) {
+            console.error('[DatabaseService] Error getting paginated notes:', {
+                limit,
+                offset,
+                error: error instanceof Error ? error.message : 'Unknown error',
+                stack: error instanceof Error ? error.stack : undefined
+            });
+            return {
+                success: false,
+                error: error instanceof Error ? error.message : 'Failed to get notes'
+            };
+        }
+    }
     updateNote(note: Note): UpdateNoteResult {
         try {
             console.log('[DatabaseService] Updating note:', { id: note.id, title: note.title });
@@ -216,5 +261,26 @@ class DatabaseService {
 
 }
 
-export const dbService = new DatabaseService();
-export default dbService;
+// Don't instantiate at module load - wait for app to be ready
+let dbServiceInstance: DatabaseService | null = null;
+
+export function initializeDatabase(): DatabaseService {
+    if (!dbServiceInstance) {
+        dbServiceInstance = new DatabaseService();
+    }
+    return dbServiceInstance;
+}
+
+export function getDatabase(): DatabaseService {
+    if (!dbServiceInstance) {
+        throw new Error('Database not initialized. Call initializeDatabase() first.');
+    }
+    return dbServiceInstance;
+}
+
+// For backward compatibility, but should be avoided
+export default {
+    get instance() {
+        return getDatabase();
+    }
+};
