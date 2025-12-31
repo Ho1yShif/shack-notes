@@ -15,8 +15,13 @@ function App() {
   }, []);
 
   const loadNotes = async () => {
-    const allNotes = await window.notesAPI.getAllNotes();
-    setNotes(allNotes);
+    const result = await window.notesAPI.getAllNotes();
+    if (result.success && result.notes) {
+      setNotes(result.notes);
+    } else {
+      console.error('Failed to load notes:', result.error);
+      setNotes([]);
+    }
   };
 
   const handleCreateNew = () => {
@@ -41,32 +46,54 @@ function App() {
       return;
     }
 
-    if (isCreating) {
-      await window.notesAPI.createNote({ title, content });
-    } else if (selectedNote) {
-      await window.notesAPI.updateNote({
-        ...selectedNote,
-        title,
-        content,
-      });
-    }
+    try {
+      if (isCreating) {
+        const result = await window.notesAPI.createNote({ title, content });
+        if (!result.success) {
+          alert('Failed to create note: ' + result.error);
+          return;
+        }
+      } else if (selectedNote) {
+        const result = await window.notesAPI.updateNote({
+          ...selectedNote,
+          title,
+          content,
+        });
+        if (!result.success) {
+          alert('Failed to update note: ' + result.error);
+          return;
+        }
+      }
 
-    setTitle('');
-    setContent('');
-    setIsCreating(false);
-    setSelectedNote(null);
-    setShowList(true);
-    await loadNotes();
+      setTitle('');
+      setContent('');
+      setIsCreating(false);
+      setSelectedNote(null);
+      setShowList(true);
+      await loadNotes();
+    } catch (error) {
+      console.error('Error saving note:', error);
+      alert('Failed to save note');
+    }
   };
 
   const handleDelete = async () => {
     if (selectedNote && confirm('Delete this note?')) {
-      await window.notesAPI.deleteNote(selectedNote.id);
-      setSelectedNote(null);
-      setTitle('');
-      setContent('');
-      setShowList(true);
-      await loadNotes();
+      try {
+        const result = await window.notesAPI.deleteNote(selectedNote.id);
+        if (!result.success) {
+          alert('Failed to delete note: ' + result.error);
+          return;
+        }
+        setSelectedNote(null);
+        setTitle('');
+        setContent('');
+        setShowList(true);
+        await loadNotes();
+      } catch (error) {
+        console.error('Error deleting note:', error);
+        alert('Failed to delete note');
+      }
     }
   };
 
