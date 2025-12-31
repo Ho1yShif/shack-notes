@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import '@/App.css';
 import { Note, CreateNoteInput } from '@/types';
+import logo from '@/assets/logos/logo.png';
 
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);
@@ -126,7 +127,10 @@ function App() {
             ← Back
           </button>
         )}
-        <h1>Shack Notes</h1>
+        <div className="header-title">
+          <img src={logo} alt="Shack Notes" className="logo" />
+          <h1>shack notes</h1>
+        </div>
         {showList && (
           <button className="new-btn" onClick={handleCreateNew}>
             +

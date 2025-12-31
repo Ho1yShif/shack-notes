@@ -24,11 +24,28 @@
   justify-content: space-between;
 }
 
+.header-title {
+  position: relative;
+  display: inline-block;
+}
+
+.logo {
+  height: 7rem;
+  width: auto;
+  display: block;
+}
+
 .header h1 {
+  position: absolute;
+  bottom: 0;
+  right: -4.8rem;
   font-size: 1.5rem;
   font-weight: 700;
   color: #8BA888;
   letter-spacing: -0.02em;
+  margin: 0;
+  padding: 1.2rem 0.5rem;
+  border-radius: 4px;
 }
 
 .new-btn {
