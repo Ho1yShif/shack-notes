@@ -14,6 +14,7 @@ export default defineConfig({
       outDir: "dist/main",
       rollupOptions: {
         input: "src/main/main.ts",
+        external: ["better-sqlite3"],
       },
     },
   },

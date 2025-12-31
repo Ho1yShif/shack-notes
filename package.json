@@ -20,7 +20,17 @@
     "url": "https://github.com/Ho1yShif/shack-notes/issues"
   },
   "homepage": "https://github.com/Ho1yShif/shack-notes#readme",
+  "dependencies": {
+    "@tiptap/extension-placeholder": "^2.10.3",
+    "@tiptap/react": "^2.10.3",
+    "@tiptap/starter-kit": "^2.10.3",
+    "better-sqlite3": "^12.5.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "web-vitals": "^5.1.0"
+  },
   "devDependencies": {
+    "@types/better-sqlite3": "^7.6.11",
     "@types/node": "^24.10.0",
     "@types/react": "^19.2.2",
     "@types/react-dom": "^19.2.2",
@@ -30,10 +40,5 @@
     "electron-vite": "^4.0.1",
     "typescript": "^5.9.3",
     "vite": "^7.1.12"
-  },
-  "dependencies": {
-    "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "web-vitals": "^5.1.0"
   }
 }
