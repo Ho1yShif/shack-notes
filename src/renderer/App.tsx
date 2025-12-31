@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import '@/App.css';
-import { Note, CreateNoteInput } from './types';
+import { Note, CreateNoteInput } from '@/types';
 
 function App() {
   const [notes, setNotes] = useState<Note[]>([]);

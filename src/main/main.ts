@@ -1,6 +1,6 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
-import dbService from './database';
+import dbService from '@main/database';
 
 app.whenReady().then(() => {
   const win = new BrowserWindow({

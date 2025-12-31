@@ -1,7 +1,7 @@
 "use strict";
-const Database = require("better-sqlite3");
 const electron = require("electron");
-const path$1 = require("path");
+const path = require("path");
+const Database = require("better-sqlite3");
 class DatabaseService {
   constructor() {
     this.statements = {
@@ -11,7 +11,7 @@ class DatabaseService {
       updateNote: null,
       deleteNote: null
     };
-    this.db = new Database(path$1.join(electron.app.getPath("userData"), "notes.db"));
+    this.db = new Database(path.join(electron.app.getPath("userData"), "notes.db"));
     this.db.pragma("journal_mode = WAL");
     this.initialize();
     this.prepareStatements();
@@ -161,10 +161,8 @@ class DatabaseService {
   }
 }
 const dbService = new DatabaseService();
-const { app, BrowserWindow, ipcMain } = require("electron");
-const path = require("path");
-app.whenReady().then(() => {
-  const win = new BrowserWindow({
+electron.app.whenReady().then(() => {
+  const win = new electron.BrowserWindow({
     width: 1200,
     height: 800,
     webPreferences: {
@@ -186,19 +184,19 @@ app.whenReady().then(() => {
   }
   win.show();
 });
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+electron.app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") electron.app.quit();
 });
-ipcMain.handle("notes:getAll", async () => {
+electron.ipcMain.handle("notes:getAll", async () => {
   return dbService.getAllNotes();
 });
-ipcMain.handle("notes:getOne", async (_event, id) => {
+electron.ipcMain.handle("notes:getOne", async (_event, id) => {
   return dbService.getNote(id);
 });
-ipcMain.handle("notes:create", async (_event, note) => {
+electron.ipcMain.handle("notes:create", async (_event, note) => {
   return dbService.createNote(note);
 });
-ipcMain.handle("notes:update", async (_event, note) => {
+electron.ipcMain.handle("notes:update", async (_event, note) => {
   const updateResult = dbService.updateNote(note);
   if (!updateResult.success) {
     return {
@@ -208,6 +206,6 @@ ipcMain.handle("notes:update", async (_event, note) => {
   }
   return dbService.getNote(note.id);
 });
-ipcMain.handle("notes:delete", async (_event, id) => {
+electron.ipcMain.handle("notes:delete", async (_event, id) => {
   return dbService.deleteNote(id);
 });

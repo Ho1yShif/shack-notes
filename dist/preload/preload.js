@@ -1,9 +1,9 @@
 "use strict";
-const { contextBridge, ipcRenderer } = require("electron");
-contextBridge.exposeInMainWorld("notesAPI", {
-  getAllNotes: () => ipcRenderer.invoke("notes:getAll"),
-  getNote: (id) => ipcRenderer.invoke("notes:getOne", id),
-  createNote: (note) => ipcRenderer.invoke("notes:create", note),
-  updateNote: (note) => ipcRenderer.invoke("notes:update", note),
-  deleteNote: (id) => ipcRenderer.invoke("notes:delete", id)
+const electron = require("electron");
+electron.contextBridge.exposeInMainWorld("notesAPI", {
+  getAllNotes: () => electron.ipcRenderer.invoke("notes:getAll"),
+  getNote: (id) => electron.ipcRenderer.invoke("notes:getOne", id),
+  createNote: (note) => electron.ipcRenderer.invoke("notes:create", note),
+  updateNote: (note) => electron.ipcRenderer.invoke("notes:update", note),
+  deleteNote: (id) => electron.ipcRenderer.invoke("notes:delete", id)
 });
