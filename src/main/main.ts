@@ -52,10 +52,16 @@ ipcMain.handle('notes:create', async (_event, note: { title: string; content: st
 });
 
 ipcMain.handle('notes:update', async (_event, note: any) => {
-  dbService.updateNote(note);
+  const updateResult = dbService.updateNote(note);
+  if (!updateResult.success) {
+    return {
+      success: false,
+      error: updateResult.error
+    };
+  }
   return dbService.getNote(note.id);
 });
 
 ipcMain.handle('notes:delete', async (_event, id: number) => {
-  dbService.deleteNote(id);
+  return dbService.deleteNote(id);
 });

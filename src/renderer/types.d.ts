@@ -11,14 +11,45 @@ export interface CreateNoteInput {
   content: string;
 }
 
+export interface CreateNoteResult {
+  success: boolean;
+  id?: number;
+  message?: string;
+  error?: string;
+}
+
+export interface GetNoteResult {
+  success: boolean;
+  note?: Note;
+  error?: string;
+}
+
+export interface GetAllNotesResult {
+  success: boolean;
+  notes?: Note[];
+  error?: string;
+}
+
+export interface UpdateNoteResult {
+  success: boolean;
+  message?: string;
+  error?: string;
+}
+
+export interface DeleteNoteResult {
+  success: boolean;
+  message?: string;
+  error?: string;
+}
+
 declare global {
   interface Window {
     notesAPI: {
-      getAllNotes: () => Promise<Note[]>;
-      getNote: (id: number) => Promise<Note | undefined>;
-      createNote: (note: CreateNoteInput) => Promise<Note>;
-      updateNote: (note: Note) => Promise<Note>;
-      deleteNote: (id: number) => Promise<void>;
+      getAllNotes: () => Promise<GetAllNotesResult>;
+      getNote: (id: number) => Promise<GetNoteResult>;
+      createNote: (note: CreateNoteInput) => Promise<CreateNoteResult>;
+      updateNote: (note: Note) => Promise<GetNoteResult>;
+      deleteNote: (id: number) => Promise<DeleteNoteResult>;
     };
   }
 }

@@ -26,8 +26,7 @@
     "@tiptap/starter-kit": "^2.10.3",
     "better-sqlite3": "^12.5.0",
     "react": "^19.2.3",
-    "react-dom": "^19.2.3",
-    "web-vitals": "^5.1.0"
+    "react-dom": "^19.2.3"
   },
   "devDependencies": {
     "@types/better-sqlite3": "^7.6.11",

@@ -68,16 +68,93 @@ class DatabaseService {
     }
   }
   getNote(id) {
-    return this.statements.getNote.get(id);
+    try {
+      console.log("[DatabaseService] Getting note with ID:", id);
+      const note = this.statements.getNote.get(id);
+      if (!note) {
+        return {
+          success: false,
+          error: "Note not found"
+        };
+      }
+      console.log("[DatabaseService] Note retrieved successfully");
+      return {
+        success: true,
+        note
+      };
+    } catch (error) {
+      console.error("[DatabaseService] Error getting note:", {
+        id,
+        error: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : void 0
+      });
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Failed to get note"
+      };
+    }
   }
   getAllNotes() {
-    return this.statements.getAllNotes.all();
+    try {
+      console.log("[DatabaseService] Getting all notes");
+      const notes = this.statements.getAllNotes.all();
+      console.log("[DatabaseService] Retrieved", notes.length, "notes");
+      return {
+        success: true,
+        notes
+      };
+    } catch (error) {
+      console.error("[DatabaseService] Error getting all notes:", {
+        error: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : void 0
+      });
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Failed to get notes"
+      };
+    }
   }
   updateNote(note) {
-    this.statements.updateNote.run(note.title, note.content, note.id);
+    try {
+      console.log("[DatabaseService] Updating note:", { id: note.id, title: note.title });
+      this.statements.updateNote.run(note.title, note.content, note.id);
+      console.log("[DatabaseService] Note updated successfully");
+      return {
+        success: true,
+        message: "Note updated successfully"
+      };
+    } catch (error) {
+      console.error("[DatabaseService] Error updating note:", {
+        id: note.id,
+        error: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : void 0
+      });
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Failed to update note"
+      };
+    }
   }
   deleteNote(id) {
-    this.statements.deleteNote.run(id);
+    try {
+      console.log("[DatabaseService] Deleting note with ID:", id);
+      this.statements.deleteNote.run(id);
+      console.log("[DatabaseService] Note deleted successfully");
+      return {
+        success: true,
+        message: "Note deleted successfully"
+      };
+    } catch (error) {
+      console.error("[DatabaseService] Error deleting note:", {
+        id,
+        error: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : void 0
+      });
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Failed to delete note"
+      };
+    }
   }
   close() {
     this.db.close();
@@ -122,9 +199,15 @@ ipcMain.handle("notes:create", async (_event, note) => {
   return dbService.createNote(note);
 });
 ipcMain.handle("notes:update", async (_event, note) => {
-  dbService.updateNote(note);
+  const updateResult = dbService.updateNote(note);
+  if (!updateResult.success) {
+    return {
+      success: false,
+      error: updateResult.error
+    };
+  }
   return dbService.getNote(note.id);
 });
 ipcMain.handle("notes:delete", async (_event, id) => {
-  dbService.deleteNote(id);
+  return dbService.deleteNote(id);
 });
