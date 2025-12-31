@@ -98,7 +98,7 @@ function App() {
             ← Back
           </button>
         )}
-        <h1>Notes</h1>
+        <h1>Shack Notes</h1>
         {showList && (
           <button className="new-btn" onClick={handleCreateNew}>
             +
