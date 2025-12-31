@@ -188,7 +188,6 @@ erDiagram
 **Polish:**
 
 - Make app take up entire screen when open
-- Display timestamps in user's local time zone
 - Empty state when no notes exist
 - Loading states during database operations
 - Error handling with user-friendly messages
