@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require("electron");
+const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
+import dbService from './database';
 
 app.whenReady().then(() => {
   const win = new BrowserWindow({
@@ -18,9 +19,10 @@ app.whenReady().then(() => {
     win.webContents.openDevTools();
     
     // Suppress harmless DevTools autofill warnings
-    win.webContents.on('console-message', (event, level, message) => {
+    win.webContents.on('console-message', (_event, _level, message) => {
+      // Suppress Autofill protocol warnings from DevTools
       if (message.includes('Autofill')) {
-        event.preventDefault();
+        return;
       }
     });
   } else {
@@ -34,4 +36,26 @@ app.whenReady().then(() => {
 // Quit the app when no windows are open on non-macOS platforms
 app.on("window-all-closed", () => {
   if (process.platform !== "darwin") app.quit();
+});
+
+// IPC Handlers for database operations
+ipcMain.handle('notes:getAll', async () => {
+  return dbService.getAllNotes();
+});
+
+ipcMain.handle('notes:getOne', async (_event, id: number) => {
+  return dbService.getNote(id);
+});
+
+ipcMain.handle('notes:create', async (_event, note: { title: string; content: string }) => {
+  return dbService.createNote(note);
+});
+
+ipcMain.handle('notes:update', async (_event, note: any) => {
+  dbService.updateNote(note);
+  return dbService.getNote(note.id);
+});
+
+ipcMain.handle('notes:delete', async (_event, id: number) => {
+  dbService.deleteNote(id);
 });
