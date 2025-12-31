@@ -1,8 +1,10 @@
 import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
-import dbService from '@main/database';
+import { initializeDatabase, getDatabase } from '@main/database';
 
 app.whenReady().then(() => {
+  // Initialize database after app is ready
+  initializeDatabase();
   const win = new BrowserWindow({
     width: 1200,
     height: 800,
@@ -40,28 +42,32 @@ app.on("window-all-closed", () => {
 
 // IPC Handlers for database operations
 ipcMain.handle('notes:getAll', async () => {
-  return dbService.getAllNotes();
+  return getDatabase().getAllNotes();
+});
+
+ipcMain.handle('notes:getPaginated', async (_event, limit: number, offset: number) => {
+  return getDatabase().getNotesPaginated(limit, offset);
 });
 
 ipcMain.handle('notes:getOne', async (_event, id: number) => {
-  return dbService.getNote(id);
+  return getDatabase().getNote(id);
 });
 
 ipcMain.handle('notes:create', async (_event, note: { title: string; content: string }) => {
-  return dbService.createNote(note);
+  return getDatabase().createNote(note);
 });
 
 ipcMain.handle('notes:update', async (_event, note: any) => {
-  const updateResult = dbService.updateNote(note);
+  const updateResult = getDatabase().updateNote(note);
   if (!updateResult.success) {
     return {
       success: false,
       error: updateResult.error
     };
   }
-  return dbService.getNote(note.id);
+  return getDatabase().getNote(note.id);
 });
 
 ipcMain.handle('notes:delete', async (_event, id: number) => {
-  return dbService.deleteNote(id);
+  return getDatabase().deleteNote(id);
 });
