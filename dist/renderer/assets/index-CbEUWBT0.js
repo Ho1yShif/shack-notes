@@ -12610,7 +12610,7 @@ function App() {
           {
             type: "text",
             className: "title-input",
-            placeholder: "Note title",
+            placeholder: "Your exciting note title here",
             value: title,
             onChange: (e) => setTitle(e.target.value)
           }
@@ -12619,7 +12619,7 @@ function App() {
           "textarea",
           {
             className: "content-input",
-            placeholder: "Start writing...",
+            placeholder: "Your fascinating note here",
             value: content,
             onChange: (e) => setContent(e.target.value)
           }

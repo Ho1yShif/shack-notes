@@ -8,6 +8,8 @@ class DatabaseService {
       createNote: null,
       getNote: null,
       getAllNotes: null,
+      getNotesPaginated: null,
+      getNotesCount: null,
       updateNote: null,
       deleteNote: null
     };
@@ -30,7 +32,7 @@ class DatabaseService {
   prepareStatements() {
     this.statements.createNote = this.db.prepare(`
             INSERT INTO notes (title, content, createdAt, updatedAt)
-            VALUES (?, ?, datetime('now'), datetime('now'))
+            VALUES (?, ?, datetime('now', 'localtime'), datetime('now', 'localtime'))
         `);
     this.statements.getNote = this.db.prepare(`
             SELECT * FROM notes WHERE id = ?
@@ -38,8 +40,14 @@ class DatabaseService {
     this.statements.getAllNotes = this.db.prepare(`
             SELECT * FROM notes ORDER BY updatedAt DESC
         `);
+    this.statements.getNotesPaginated = this.db.prepare(`
+            SELECT * FROM notes ORDER BY updatedAt DESC LIMIT ? OFFSET ?
+        `);
+    this.statements.getNotesCount = this.db.prepare(`
+            SELECT COUNT(*) as total FROM notes
+        `);
     this.statements.updateNote = this.db.prepare(`
-            UPDATE notes SET title = ?, content = ?, updatedAt = datetime('now') WHERE id = ?
+            UPDATE notes SET title = ?, content = ?, updatedAt = datetime('now', 'localtime') WHERE id = ?
         `);
     this.statements.deleteNote = this.db.prepare(`
             DELETE FROM notes WHERE id = ?
@@ -114,6 +122,33 @@ class DatabaseService {
       };
     }
   }
+  getNotesPaginated(limit, offset) {
+    try {
+      console.log("[DatabaseService] Getting paginated notes:", { limit, offset });
+      const notes = this.statements.getNotesPaginated.all(limit, offset);
+      const countResult = this.statements.getNotesCount.get();
+      const total = countResult.total;
+      const hasMore = offset + notes.length < total;
+      console.log("[DatabaseService] Retrieved", notes.length, "notes out of", total, "total. HasMore:", hasMore);
+      return {
+        success: true,
+        notes,
+        total,
+        hasMore
+      };
+    } catch (error) {
+      console.error("[DatabaseService] Error getting paginated notes:", {
+        limit,
+        offset,
+        error: error instanceof Error ? error.message : "Unknown error",
+        stack: error instanceof Error ? error.stack : void 0
+      });
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Failed to get notes"
+      };
+    }
+  }
   updateNote(note) {
     try {
       console.log("[DatabaseService] Updating note:", { id: note.id, title: note.title });
@@ -160,8 +195,21 @@ class DatabaseService {
     this.db.close();
   }
 }
-const dbService = new DatabaseService();
+let dbServiceInstance = null;
+function initializeDatabase() {
+  if (!dbServiceInstance) {
+    dbServiceInstance = new DatabaseService();
+  }
+  return dbServiceInstance;
+}
+function getDatabase() {
+  if (!dbServiceInstance) {
+    throw new Error("Database not initialized. Call initializeDatabase() first.");
+  }
+  return dbServiceInstance;
+}
 electron.app.whenReady().then(() => {
+  initializeDatabase();
   const win = new electron.BrowserWindow({
     width: 1200,
     height: 800,
@@ -188,24 +236,27 @@ electron.app.on("window-all-closed", () => {
   if (process.platform !== "darwin") electron.app.quit();
 });
 electron.ipcMain.handle("notes:getAll", async () => {
-  return dbService.getAllNotes();
+  return getDatabase().getAllNotes();
+});
+electron.ipcMain.handle("notes:getPaginated", async (_event, limit, offset) => {
+  return getDatabase().getNotesPaginated(limit, offset);
 });
 electron.ipcMain.handle("notes:getOne", async (_event, id) => {
-  return dbService.getNote(id);
+  return getDatabase().getNote(id);
 });
 electron.ipcMain.handle("notes:create", async (_event, note) => {
-  return dbService.createNote(note);
+  return getDatabase().createNote(note);
 });
 electron.ipcMain.handle("notes:update", async (_event, note) => {
-  const updateResult = dbService.updateNote(note);
+  const updateResult = getDatabase().updateNote(note);
   if (!updateResult.success) {
     return {
       success: false,
       error: updateResult.error
     };
   }
-  return dbService.getNote(note.id);
+  return getDatabase().getNote(note.id);
 });
 electron.ipcMain.handle("notes:delete", async (_event, id) => {
-  return dbService.deleteNote(id);
+  return getDatabase().deleteNote(id);
 });
