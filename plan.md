@@ -1,3 +1,9 @@
+### Mobile
+
+Download React
+Make app properly mobile-first
+Review all CSS manually
+
 ### Rich Text Editor Integration
 
 **Install dependencies:**
@@ -15,13 +21,13 @@
 
 ## Polish
 
+- Implement search with Cmd+K in UI
+- Cache first 8 notes so that when you go back to the landing page, it takes no time
+- Make the door opening effect 0.2 seconds
 - Make app take up entire screen when open
 - Nicer empty state when no notes exist
 - Loading states during database operations
 - Error handling with user-friendly messages
 - Keyboard shortcuts (Ctrl/Cmd+N for new note)
 - Make save/update look smoother
-
-### Bonus
-- Implement search with Cmd+K in UI
-- Deploy app so Zack can use it and we can store personal notes on here
+- Deploy app a pk file so Zack can use it and we can store personal notes on here
