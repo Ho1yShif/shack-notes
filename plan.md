@@ -1,3 +1,7 @@
+## Fix
+Weird transitions when opening a note and saving a note
+Make it smooth and not multiple steps/refreshes
+
 ### Mobile
 
 Download React
