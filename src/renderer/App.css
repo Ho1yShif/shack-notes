@@ -42,10 +42,10 @@
   --space-xl: 3rem;
   
   /* Animation Durations */
-  --duration-fast: 200ms;
-  --duration-normal: 400ms;
-  --duration-slow: 600ms;
-  --duration-door: 500ms;
+  --duration-fast: 80ms;
+  --duration-normal: 100ms;
+  --duration-slow: 200ms;
+  --duration-door: 200ms;
   
   /* Animation Easings */
   --easing-door: cubic-bezier(0.4, 0, 0.2, 1);
@@ -57,11 +57,7 @@
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
   --shadow-door: 0 10px 30px rgba(0, 0, 0, 0.6);
-  
-  /* Border Radius */
-  --radius-sm: 6px;
-  --radius-md: 12px;
-  --radius-lg: 16px;
+
 }
 
 /* ============================================
@@ -149,16 +145,6 @@
   }
 }
 
-/* Door Peek (Hover) */
-@keyframes doorPeek {
-  0% {
-    transform: scale(1);
-  }
-  100% {
-    transform: scale(1.02);
-  }
-}
-
 /* Scale Fade In */
 @keyframes scaleFadeIn {
   0% {
@@ -209,7 +195,7 @@ body {
   overflow: hidden;
 }
 
-/* Subtle texture overlay for shack feel */
+/* Subtle texture overlay for shack-theme feel */
 .app::before {
   content: '';
   position: fixed;
@@ -295,7 +281,6 @@ body {
   cursor: pointer;
   padding: var(--space-sm);
   min-width: 3rem;
-  border-radius: var(--radius-sm);
   transition: all var(--duration-fast) var(--easing-smooth);
   font-family: var(--font-display);
 }
@@ -303,11 +288,6 @@ body {
 .back-btn:hover,
 .new-btn:hover {
   color: rgba(184, 149, 106, 0.7);
-}
-
-.back-btn:active,
-.new-btn:active {
-  transform: translateY(0);
 }
 
 /* ============================================
@@ -400,11 +380,10 @@ body {
 
 /* Stagger animation for list items */
 .note-item:nth-child(1) { animation-delay: 0ms; }
-.note-item:nth-child(2) { animation-delay: 50ms; }
-.note-item:nth-child(3) { animation-delay: 100ms; }
-.note-item:nth-child(4) { animation-delay: 150ms; }
-.note-item:nth-child(5) { animation-delay: 200ms; }
-.note-item:nth-child(n+6) { animation-delay: 250ms; }
+.note-item:nth-child(2) { animation-delay: 15ms; }
+.note-item:nth-child(3) { animation-delay: 30ms; }
+.note-item:nth-child(4) { animation-delay: 45ms; }
+.note-item:nth-child(n+5) { animation-delay: 60ms; }
 
 /* Door frame inner detail */
 .note-item::before {
@@ -457,7 +436,7 @@ body {
   display: block;
   color: var(--color-wood-sage);
   font-size: var(--text-xs);
-  font-weight: 500;
+  font-weight: 600;
   letter-spacing: 0.05em;
   margin-top: var(--space-xs);
   max-width: 100%;
@@ -673,7 +652,6 @@ body {
   height: 24px;
   width: 60%;
   background: rgba(139, 168, 136, 0.2);
-  border-radius: var(--radius-sm);
   margin-bottom: var(--space-xs);
 }
 
@@ -681,7 +659,6 @@ body {
   height: 16px;
   width: 90%;
   background: rgba(139, 168, 136, 0.15);
-  border-radius: var(--radius-sm);
   margin-bottom: var(--space-xs);
 }
 
@@ -689,7 +666,6 @@ body {
   height: 12px;
   width: 30%;
   background: rgba(139, 168, 136, 0.15);
-  border-radius: var(--radius-sm);
 }
 
 /* ============================================
@@ -803,6 +779,7 @@ body {
   font-size: var(--text-xs);
   font-family: var(--font-body);
   letter-spacing: 0.05em;
+  font-weight: 500;
 }
 
 /* ============================================
