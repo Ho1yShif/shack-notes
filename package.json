@@ -21,9 +21,9 @@
   },
   "homepage": "https://github.com/Ho1yShif/shack-notes#readme",
   "dependencies": {
-    "@tiptap/extension-placeholder": "^2.10.3",
-    "@tiptap/react": "^2.10.3",
-    "@tiptap/starter-kit": "^2.10.3",
+    "@tiptap/extension-placeholder": "^2.27.1",
+    "@tiptap/react": "^2.27.1",
+    "@tiptap/starter-kit": "^2.27.1",
     "better-sqlite3": "^12.5.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3"
