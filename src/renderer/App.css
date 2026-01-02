@@ -454,8 +454,8 @@ body {
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: var(--space-md);
-  height: calc(100vh - 6rem);
+  height: calc(90vh - 6rem);
+  overflow: hidden;
   animation: fadeSlideIn var(--duration-slow) var(--easing-smooth);
 }
 
@@ -471,6 +471,8 @@ body {
   position: relative;
   display: flex;
   align-items: stretch;
+  margin-bottom: var(--space-md);
+  flex-shrink: 0;
 }
 
 .editor-back-btn {
@@ -532,7 +534,7 @@ body {
   font-size: var(--text-base);
   color: var(--color-shack-white);
   resize: none;
-  max-height: 80vh;
+  max-height: 50vh;
   min-height: 700px;
   overflow-y: auto;
   font-family: var(--font-body);
@@ -555,8 +557,68 @@ body {
 }
 
 /* ============================================
+   EDITOR CONTENT WRAPPER
+   ============================================ */
+
+.editor-content-wrapper {
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  margin: var(--space-md) 0;
+  border: 2px solid var(--color-door-bronze);
+  border-radius: 0;
+  background: var(--color-dark-charcoal);
+  transition: all var(--duration-fast) var(--easing-smooth);
+}
+
+.editor-content-wrapper:focus-within {
+  border-color: var(--color-wood-sage);
+  box-shadow: 
+    0 0 0 3px rgba(139, 168, 136, 0.2),
+    var(--shadow-md);
+}
+
+/* ============================================
    TIPTAP EDITOR STYLES
    ============================================ */
+
+.control-group {
+  padding-top: var(--space-md);
+  padding-left: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.button-group button {
+  padding: var(--space-xs) var(--space-sm);
+  border: 1px solid var(--color-door-bronze);
+  background: var(--color-dark-charcoal);
+  color: var(--color-shack-white);
+  cursor: pointer;
+  font-size: var(--text-sm);
+  font-family: var(--font-body);
+  transition: all var(--duration-fast) var(--easing-smooth);
+}
+
+.button-group button:hover:not(:disabled) {
+  background: #242424;
+}
+
+.button-group button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.button-group button.is-active {
+  background: var(--color-wood-sage);
+  color: var(--color-dark-charcoal);
+  border-color: var(--color-wood-sage);
+}
 
 .editor-wrapper {
   background: var(--color-dark-charcoal);
@@ -576,9 +638,7 @@ body {
   padding: var(--space-md);
   font-size: var(--text-base);
   color: var(--color-shack-white);
-  min-height: 700px;
-  max-height: 80vh;
-  overflow-y: auto;
+  min-height: 100%;
   font-family: var(--font-body);
   line-height: 1.8;
   outline: none;
@@ -600,6 +660,8 @@ body {
 .editor-actions {
   display: flex;
   gap: var(--space-sm);
+  flex-shrink: 0;
+  margin-top: var(--space-md);
   padding-bottom: var(--space-sm);
 }
 
