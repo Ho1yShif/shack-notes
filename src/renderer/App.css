@@ -555,6 +555,45 @@ body {
 }
 
 /* ============================================
+   TIPTAP EDITOR STYLES
+   ============================================ */
+
+.editor-wrapper {
+  background: var(--color-dark-charcoal);
+  border: 2px solid var(--color-door-bronze);
+  border-radius: 0;
+  transition: all var(--duration-fast) var(--easing-smooth);
+}
+
+.editor-wrapper:focus-within {
+  border-color: var(--color-wood-sage);
+  box-shadow: 
+    0 0 0 3px rgba(139, 168, 136, 0.2),
+    var(--shadow-md);
+}
+
+.ProseMirror {
+  padding: var(--space-md);
+  font-size: var(--text-base);
+  color: var(--color-shack-white);
+  min-height: 700px;
+  max-height: 80vh;
+  overflow-y: auto;
+  font-family: var(--font-body);
+  line-height: 1.8;
+  outline: none;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: var(--color-weathered-wood);
+  opacity: 0.6;
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* ============================================
    EDITOR ACTIONS
    ============================================ */
 

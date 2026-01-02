@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import '@/App.css';
 import { Note, CreateNoteInput } from '@/types';
 import logo from '@/assets/logos/logo.png';
+import Editor from '@/components/Editor'
 
 const NOTES_PER_PAGE = 8;
 const NOTE_PREVIEW_LENGTH = 200;
@@ -102,6 +103,7 @@ function App() {
       setClickedNoteId(null);
     }, 600);
   };
+
 
   const handleSave = async () => {
     if (!title.trim()) {
@@ -345,13 +347,10 @@ function App() {
                 aria-label="Note title"
               />
             </div>
-            <textarea
-              className="content-input"
-              placeholder="Your fascinating note here"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              aria-label="Note content"
-            />
+            <Editor 
+            initialContent={content || "<p>Your fascinating note here</p>"}
+            onSave={(htmlContent) => setContent(htmlContent)}
+          />
             <div className="editor-actions">
               <button 
                 className="save-btn" 
