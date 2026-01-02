@@ -11,7 +11,13 @@ interface EditorProps {
 
 const extensions = [StarterKit]
 
-function MenuBar({ editor }: { editor: Editor }) {
+function MenuBar({ editor }: { editor: TipTapEditor | null }) {
+  
+  // Add null check before using the editor
+  if (!editor) {
+    return null;  // or return <div>Loading editor...</div>
+  }
+  
   // Read the current editor's state, and re-render the component when it changes
   const editorState = useEditorState({
     editor,
@@ -28,9 +34,6 @@ function MenuBar({ editor }: { editor: Editor }) {
         isHeading1: ctx.editor.isActive('heading', { level: 1 }) ?? false,
         isHeading2: ctx.editor.isActive('heading', { level: 2 }) ?? false,
         isHeading3: ctx.editor.isActive('heading', { level: 3 }) ?? false,
-        isHeading4: ctx.editor.isActive('heading', { level: 4 }) ?? false,
-        isHeading5: ctx.editor.isActive('heading', { level: 5 }) ?? false,
-        isHeading6: ctx.editor.isActive('heading', { level: 6 }) ?? false,
         isBulletList: ctx.editor.isActive('bulletList') ?? false,
         isOrderedList: ctx.editor.isActive('orderedList') ?? false,
         isBlockquote: ctx.editor.isActive('blockquote') ?? false,

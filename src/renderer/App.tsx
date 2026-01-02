@@ -347,10 +347,12 @@ function App() {
                 aria-label="Note title"
               />
             </div>
-            <Editor 
-            initialContent={content || "<p>Your fascinating note here</p>"}
-            onSave={(htmlContent) => setContent(htmlContent)}
-          />
+            <div className="editor-content-wrapper">
+              <Editor 
+                initialContent={content || "<p>Your fascinating note here</p>"}
+                onSave={(htmlContent) => setContent(htmlContent)}
+              />
+            </div>
             <div className="editor-actions">
               <button 
                 className="save-btn" 
