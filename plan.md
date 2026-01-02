@@ -10,22 +10,13 @@ Review all CSS manually
 Smooth out door animations
 
 ### Rich Text Editor Integration
-
-**Install dependencies:**
-
-- `@tiptap/react` - Rich text editor framework
-- `@tiptap/starter-kit` - Basic editing extensions (bold, italic, lists, etc.)
-- `@tiptap/extension-placeholder` - Placeholder text
-
-**Create editor component** in [`src/renderer/components/Editor.tsx`](src/renderer/components/Editor.tsx):
-
-- Setup Tiptap editor with StarterKit
-- Configure toolbar with formatting buttons (bold, italic, headings, lists)
 - Handle content changes with debounced auto-save
 - Store content as HTML string
+- Need to format all buttons nicely and move them above the note viewport
 
 ## Polish
 
+- Pin note functionality
 - Get nicer icons for arrow, save (same for create), delete, and make buttons nicer
     - Pulse on `building your shack` loading state
 - Multi-select delete with a tag/circle in the top right of each note door

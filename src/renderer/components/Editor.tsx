@@ -143,4 +143,4 @@ const Editor = ({ initialContent, onSave }: EditorProps) => {
   )
 }
 
-export default Editor;  // Named export as default
+export { Editor };
