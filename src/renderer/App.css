@@ -778,7 +778,7 @@ body {
 
 .save-indicator {
   position: fixed;
-  top: 68px;
+  top: 140px;
   right: var(--space-lg);
   background: transparent;
   border: none;
@@ -795,12 +795,13 @@ body {
 }
 
 .save-indicator-icon {
-  font-size: var(--text-base);
+  font-size: var(--text-2xl);
+  color: var(--color-success);
 }
 
 .save-indicator-text {
-  font-size: var(--text-sm);
-  font-weight: 500;
+  font-size: var(--text-xl);
+  font-weight: 600;
   color: var(--color-wood-sage);
   font-family: var(--font-display);
 }

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import '@/App.css';
 import { Note, CreateNoteInput } from '@/types';
 import logo from '@/assets/logos/logo.png';
-import Editor from '@/components/Editor'
+import { Editor } from '@/components/Editor'
 
 const NOTES_PER_PAGE = 8;
 const NOTE_PREVIEW_LENGTH = 200;
@@ -32,8 +32,8 @@ function App() {
     loadNotes();
   }, []);
 
-  const loadNotes = async (append = false) => {
-    if (!append) {
+  const loadNotes = async (append = false, silent = false) => {
+    if (!append && !silent) {
       setIsLoading(true);
     }
     
@@ -57,7 +57,7 @@ function App() {
       }
     }
     
-    if (!append) {
+    if (!append && !silent) {
       setIsLoading(false);
     }
   };
@@ -122,13 +122,8 @@ function App() {
           setTimeout(() => setSaveStatus('idle'), 2000);
           return;
         }
-
-        setSaveStatus('saved');
         
-        // Reload notes first (in background)
-        await loadNotes();
-        
-        // Trigger door close animation and return to list
+        // Trigger door close animation and return to list immediately
         setIsAnimating(true);
         setAnimationPhase('door-close');
         
@@ -140,8 +135,16 @@ function App() {
           setShowList(true);
           setAnimationPhase('none');
           setIsAnimating(false);
-          setSaveStatus('idle');
+          
+          // Show saved indicator after navigation completes, then hide it
+          setSaveStatus('saved');
+          setTimeout(() => {
+            setSaveStatus('idle');
+          }, 1500);
         }, 600);
+        
+        // Reload notes in background (silent mode - no loading overlay)
+        await loadNotes(false, true);
       } else if (selectedNote) {
         const result = await window.notesAPI.updateNote({
           ...selectedNote,
@@ -155,15 +158,19 @@ function App() {
           return;
         }
 
-        setSaveStatus('saved');
+        // Navigate back immediately
+        handleCancel();
         
-        // Show success indicator briefly
+        // Show saved indicator after navigation completes, then hide it
         setTimeout(() => {
-          setSaveStatus('idle');
-          handleCancel();
-        }, 1000);
+          setSaveStatus('saved');
+          setTimeout(() => {
+            setSaveStatus('idle');
+          }, 1500);
+        }, 600);
         
-        await loadNotes();
+        // Reload notes in background (silent mode - no loading overlay)
+        await loadNotes(false, true);
       }
     } catch (error) {
       console.error('Error saving note:', error);
