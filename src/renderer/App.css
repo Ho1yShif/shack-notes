@@ -455,7 +455,7 @@ body {
   display: flex;
   flex-direction: column;
   height: calc(90vh - 6rem);
-  overflow: hidden;
+  overflow: visible;
   animation: fadeSlideIn var(--duration-slow) var(--easing-smooth);
 }
 
@@ -477,7 +477,7 @@ body {
 
 .editor-back-btn {
   position: absolute;
-  left: -5rem;
+  left: -4rem;
   top: 50%;
   transform: translateY(-50%);
   background: transparent;
@@ -490,6 +490,9 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  transition: all var(--duration-fast) var(--easing-smooth);
 }
 
 .editor-back-btn:hover {
